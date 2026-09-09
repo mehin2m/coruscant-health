@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-4"><i class="bi bi-person-heart"></i> My Health</h3>
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5>Recent Readings</h5>
+      {% if readings %}
+      <table class="table table-sm">
+        <thead><tr><th>Type</th><th>Value</th><th>When</th></tr></thead>
+        <tbody>
+        {% for r in readings %}
+          <tr><td>{{ r.get_reading_type_display }}</td><td>{{ r.value }} {{ r.unit }}</td><td>{{ r.recorded_at }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="text-muted">No readings uploaded yet. Your device uploads automatically via the API.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5>Doctor Recommendations</h5>
+      {% if reports %}
+        {% for r in reports %}
+          <div class="border-bottom pb-2 mb-2">
+            <span class="badge trend-{{ r.condition_trend|lower }}">{{ r.get_condition_trend_display }}</span>
+            <p class="mb-0 mt-1">{{ r.content }}</p>
+            <small class="text-muted">{{ r.created_at }}</small>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-muted">No recommendations yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

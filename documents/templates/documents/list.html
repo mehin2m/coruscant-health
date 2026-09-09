@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>Documents for {{ patient.user.username }}</h4>
+<div class="card p-3 mt-3">
+  {% for d in documents %}
+    <p><i class="bi bi-file-earmark-lock"></i> {{ d.original_filename }} ({{ d.get_doc_type_display }}) —
+      <a href="{% url 'documents:download' d.id %}">Download</a></p>
+  {% empty %}<p class="text-muted">No documents yet.</p>{% endfor %}
+</div>
+{% endblock %}

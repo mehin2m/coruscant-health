@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-4">Pending Approvals</h3>
+{% if pending_users %}
+<div class="card p-3">
+  <table class="table">
+    <thead><tr><th>Username</th><th>Role</th><th>Email</th><th></th></tr></thead>
+    <tbody>
+    {% for u in pending_users %}
+      <tr>
+        <td>{{ u.username }}</td>
+        <td>{{ u.get_role_display }}</td>
+        <td>{{ u.email }}</td>
+        <td>
+          <form method="post" class="d-inline">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ u.id }}">
+            <button class="btn btn-sm btn-brand">Approve</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">No pending registrations.</p>
+{% endif %}
+{% endblock %}

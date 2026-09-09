@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>Upload Document for {{ patient.user.username }}</h4>
+<form method="post" enctype="multipart/form-data" class="card p-3 mt-3">
+  {% csrf_token %}
+  <select name="doc_type" class="form-select mb-2">
+    <option value="SCAN_RESULT">Scan Result</option>
+    <option value="LAB_REPORT">Lab Report</option>
+    <option value="PRESCRIPTION">Prescription</option>
+    <option value="OTHER">Other</option>
+  </select>
+  <input type="file" name="file" class="form-control mb-2" required>
+  <p class="text-muted small"><i class="bi bi-shield-lock"></i> File is encrypted (Fernet/AES) before it is stored.</p>
+  <button type="submit" class="btn btn-brand">Upload</button>
+</form>
+{% endblock %}

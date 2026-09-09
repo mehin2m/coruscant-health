@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>{{ patient.user.username }}'s Record</h3>
+<div class="row g-4 mt-1">
+  <div class="col-md-7">
+    <div class="card p-3">
+      <h5>Reading Trend</h5>
+      <canvas id="trendChart" height="120"></canvas>
+    </div>
+    <div class="card p-3 mt-3">
+      <h5>Write a Report</h5>
+      <form method="post">
+        {% csrf_token %}
+        <textarea name="content" class="form-control mb-2" rows="3" placeholder="Recommendation..." required></textarea>
+        <select name="condition_trend" class="form-select mb-2">
+          <option value="IMPROVING">Improving</option>
+          <option value="STABLE">Stable</option>
+          <option value="WORSENING">Worsening</option>
+        </select>
+        <button type="submit" name="write_report" class="btn btn-brand">Save Report</button>
+      </form>
+    </div>
+    <div class="card p-3 mt-3">
+      <h5>New Order</h5>
+      <form method="post">
+        {% csrf_token %}
+        <select name="order_type" class="form-select mb-2">
+          <option value="CT_SCAN">CT Scan</option>
+          <option value="PET_SCAN">PET Scan</option>
+          <option value="BLOOD_TEST">Blood Test</option>
+          <option value="MRI">MRI</option>
+          <option value="OTHER">Other</option>
+        </select>
+        <textarea name="notes" class="form-control mb-2" rows="2" placeholder="Notes for the department"></textarea>
+        <button type="submit" name="new_order" class="btn btn-outline-brand btn-brand">Submit Order</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card p-3">
+      <h5>Past Reports</h5>
+      {% for r in reports %}
+        <p><span class="badge trend-{{ r.condition_trend|lower }}">{{ r.get_condition_trend_display }}</span> {{ r.content }}</p>
+      {% empty %}<p class="text-muted">None yet.</p>{% endfor %}
+    </div>
+    <div class="card p-3 mt-3">
+      <h5>Orders</h5>
+      {% for o in orders %}
+        <p>{{ o.get_order_type_display }} — <strong>{{ o.get_status_display }}</strong></p>
+      {% empty %}<p class="text-muted">None yet.</p>{% endfor %}
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+const chartData = {{ chart_data|safe }};
+const ctx = document.getElementById('trendChart');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: chartData.map(d => d.x),
+    datasets: [{ label: 'Readings', data: chartData.map(d => d.y), borderColor: '#0b6e4f', tension: 0.3 }]
+  },
+  options: { responsive: true }
+});
+</script>
+{% endblock %}

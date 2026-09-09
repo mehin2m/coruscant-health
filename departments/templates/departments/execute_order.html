@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>Execute Order: {{ order.get_order_type_display }} for {{ order.patient.user.username }}</h4>
+<form method="post" class="card p-3 mt-3">
+  {% csrf_token %}
+  <input type="text" name="department_name" class="form-control mb-2" placeholder="Department name (e.g. Radiology)" required>
+  <textarea name="result_summary" class="form-control mb-2" rows="3" placeholder="Result summary"></textarea>
+  <p class="text-muted small">Attach the full result file afterwards from the patient's Documents page (encrypted upload).</p>
+  <button type="submit" class="btn btn-brand">Mark Executed</button>
+</form>
+{% endblock %}

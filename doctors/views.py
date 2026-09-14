@@ -18,7 +18,11 @@ def doctor_dashboard(request):
 def patient_detail(request, patient_id):
     profile, _ = DoctorProfile.objects.get_or_create(user=request.user)
     patient = get_object_or_404(PatientProfile, pk=patient_id)
-    readings = patient.readings.all()[:100]
+
+    # Permission check: only approved patients' records may be accessed.
+    if patient.user.needs_approval:
+        messages.error(request, "This patient's registration has not been approved yet.")
+        return redirect("doctors:dashboard")
 
     if request.method == "POST":
         if "write_report" in request.POST:
@@ -39,6 +43,7 @@ def patient_detail(request, patient_id):
             messages.success(request, "Order submitted to department.")
         return redirect("doctors:patient_detail", patient_id=patient.id)
 
+    readings = patient.readings.all()[:100]
     reports = patient.reports.all()
     orders = patient.orders.all()
     # Readings serialized simply for the trend chart (Chart.js consumes this).

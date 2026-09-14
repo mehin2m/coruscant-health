@@ -19,3 +19,4 @@ class QuickIntakeTests(TestCase):
         patient = PatientProfile.objects.first()
         self.assertIsNotNone(patient)
         self.assertTrue(patient.user.is_approved)
+        self.assertEqual(patient.intake_notes, "Unconscious on arrival")

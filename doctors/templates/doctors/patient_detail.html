@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <h3>{{ patient.user.username }}'s Record</h3>
+{% if patient.intake_notes %}
+  <div class="alert alert-warning mt-2">
+    <strong>Emergency intake notes:</strong> {{ patient.intake_notes }}
+  </div>
+{% endif %}
 <div class="row g-4 mt-1">
   <div class="col-md-7">
     <div class="card p-3">

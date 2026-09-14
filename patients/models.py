@@ -8,7 +8,9 @@ class PatientProfile(models.Model):
     )
     date_of_birth = models.DateField(null=True, blank=True)
     device_id = models.CharField(max_length=64, blank=True, help_text="ID of the wearable device.")
-
+    intake_notes = models.TextField(
+        blank=True, help_text="Initial condition notes recorded at emergency intake."
+    )
     def __str__(self):
         return f"Patient: {self.user.username}"
 

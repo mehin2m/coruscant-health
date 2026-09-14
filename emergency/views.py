@@ -24,10 +24,10 @@ def quick_intake(request):
                 first_name=form.cleaned_data["full_name"],
             )
             profile = PatientProfile.objects.create(
-                user=user, date_of_birth=form.cleaned_data.get("date_of_birth")
+                user=user,
+                date_of_birth=form.cleaned_data.get("date_of_birth"),
+                intake_notes=form.cleaned_data.get("condition_notes", ""),
             )
-            if form.cleaned_data.get("condition_notes"):
-                messages.info(request, form.cleaned_data["condition_notes"])
             messages.success(request, f"Patient registered. Temporary ID: {username}")
             return redirect("emergency:quick_intake")
     else:
